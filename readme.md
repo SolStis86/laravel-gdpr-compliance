@@ -80,7 +80,7 @@ To add the agreement functionality:
         protected $fillable = [
             'last_activity',
             'accepted_gdpr',
-            'isAnonymized'
+            'is_anonymized'
         ];
     ```
 5. Change the Agreement text to your particular needs in `resources/views/gdpr/message.blade.php`

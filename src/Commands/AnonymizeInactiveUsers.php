@@ -37,15 +37,28 @@ class AnonymizeInactiveUsers extends Command
      */
     public function handle()
     {
-        $model = config('gdpr.settings.user_model_fqn', 'App\User');
-        $user = new $model();
-        $anonymizableUsers = $user::where('last_activity', '!=', null)->where('isAnonymized', 0)->where('last_activity', '<=', carbon::now()->subMonths(config('gdpr.settings.ttl')))->get();
+    	$models = config('gdpr.settings.user_model_fqns', 'App\User');
 
-        foreach ($anonymizableUsers as $user) {
-            $user->anonymize();
-            $user->update([
-                  'isAnonymized' => true,
-            ]);
-        }
+    	if (! is_array($models)) {
+			$models = [$models];
+		}
+
+    	collect($models)
+			->each(function ($model) {
+				$user = new $model();
+
+				$anonymizableUsers = $user::where('last_activity', '!=', null)
+					->where('is_anonymized', 0)
+					->where('last_activity', '<=', Carbon::now()->subMonths(config('gdpr.settings.ttl')))->get();
+
+				foreach ($anonymizableUsers as $user) {
+					$user->anonymize();
+					$user->update([
+						'is_anonymized' => true,
+					]);
+				}
+			});
+
+
     }
 }

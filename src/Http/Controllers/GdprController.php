@@ -88,9 +88,9 @@ class GdprController extends Controller
 
         $user->anonymize();
 
-        $user->update([
-            'isAnonymized' => true,
-        ]);
+			$user->update([
+				'is_anonymized' => true,
+			]);
 
         return redirect()->back();
     }
