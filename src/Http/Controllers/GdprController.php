@@ -6,6 +6,7 @@ use App\User;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Dialect\Gdpr\Http\Requests\GdprDownload;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class GdprController extends Controller
 {
@@ -82,16 +83,22 @@ class GdprController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function anonymize($id)
+    public function anonymize($modelRoute, $id)
     {
-        $user = User::findOrFail($id);
+    	try {
+    		$model = config('gdpr.model_routes')[$modelRoute];
+			$user = $model::findOrFail($id);
 
-        $user->anonymize();
+			$user->anonymize();
 
 			$user->update([
 				'is_anonymized' => true,
 			]);
 
-        return redirect()->back();
+			return redirect()->back();
+		} catch (\Exception $ex) {
+    		throw new NotFoundHttpException();
+		}
+
     }
 }

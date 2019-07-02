@@ -58,4 +58,18 @@ return [
         'default' => 'Anonymized',
     ],
 
+	/*
+    |--------------------------------------------------------------------------
+    | Model Routing
+    |--------------------------------------------------------------------------
+    |
+    | This maps routes to models for controller actions
+    |
+    |
+    */
+
+	'model_routes' => [
+		'users' => \App\User::class,
+	],
+
 ];
