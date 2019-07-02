@@ -16,7 +16,10 @@ class GdprServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->registerRoutes();
+    	if (config('gdpr.use_default_routing')) {
+			$this->registerRoutes();
+		}
+
         $this->registerCommands();
         // Load standard issue migrations
         $timestamp = date('Y_m_d_His');

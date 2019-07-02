@@ -72,4 +72,5 @@ return [
 		'users' => \App\User::class,
 	],
 
+	'use_default_routing' => true,
 ];
